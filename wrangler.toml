@@ -23,8 +23,8 @@ run_worker_first = true
 # ---------------------------------------------------------------------------
 [[kv_namespaces]]
 binding = "CLEANPAGE_KV"
-id = "YOUR_KV_NAMESPACE_ID"
-preview_id = "YOUR_KV_PREVIEW_ID"
+id = "cb7bce97ff2e41d482838d5caccf12db"
+preview_id = "31990346749e4d99900f64a54e85b340"
 
 # ---------------------------------------------------------------------------
 # Environment variables (non-secret). Secrets (none currently required for
@@ -33,7 +33,7 @@ preview_id = "YOUR_KV_PREVIEW_ID"
 # ---------------------------------------------------------------------------
 [vars]
 # Wallet address on Base that receives USDC payments. Required.
-PAYMENT_ADDRESS = "0xYourBaseWalletAddressHere"
+PAYMENT_ADDRESS = "0x644ee781ebd3518972878b4e46fd417573785a8c"
 
 # Network: "base" for mainnet USDC, "base-sepolia" for testnet during development.
 X402_NETWORK = "base"
