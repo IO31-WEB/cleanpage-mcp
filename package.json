@@ -1,0 +1,30 @@
+{
+  "name": "cleanpage-mcp",
+  "version": "1.0.0",
+  "description": "CleanPage — a paid MCP tool that turns any URL into clean, structured, agent-optimized content. Pay-per-call via x402 (USDC on Base).",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "tail": "wrangler tail",
+    "secret:put": "wrangler secret put"
+  },
+  "dependencies": {
+    "@mozilla/readability": "^0.5.0",
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "hono": "^4.6.14",
+    "linkedom": "^0.18.5",
+    "zod": "^3.23.8"
+  },
+  "optionalDependencies": {
+    "x402": "^0.3.4",
+    "x402-hono": "^0.3.4"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241127.0",
+    "typescript": "^5.7.2",
+    "wrangler": "^3.90.0"
+  }
+}

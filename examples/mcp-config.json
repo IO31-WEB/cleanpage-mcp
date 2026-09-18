@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "cleanpage": {
+      "url": "https://cleanpage-mcp.cleanpage-mcp.workers.dev/mcp",
+      "transport": "streamable-http"
+    }
+  }
+}

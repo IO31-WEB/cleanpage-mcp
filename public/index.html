@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CleanPage — clean, structured web content for AI agents</title>
+<meta name="description" content="CleanPage turns any URL into clean markdown, plain text, metadata, and structured facts. An MCP tool AI agents pay for per call via x402 — $0.02 USDC on Base, no accounts, no API keys." />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="CleanPage — clean, structured web content for AI agents" />
+<meta property="og:description" content="A paid MCP tool that turns any URL into agent-optimized markdown, metadata, and facts. $0.02 USDC per call via x402 on Base." />
+<meta property="og:url" content="https://cleanpage-mcp.cleanpage-mcp.workers.dev/" />
+<meta property="og:site_name" content="CleanPage" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="CleanPage — clean, structured web content for AI agents" />
+<meta name="twitter:description" content="Turn any URL into clean markdown, metadata, and structured facts. $0.02 USDC per call via x402 on Base." />
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%2314171c%22/><path d=%22M28 34h44M28 50h44M28 66h30%22 stroke=%22%232f5fff%22 stroke-width=%228%22 stroke-linecap=%22round%22/></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "CleanPage",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "description": "MCP server that extracts clean, structured, agent-optimized content from any URL. Paid per call via x402 (USDC on Base).",
+  "offers": {
+    "@type": "Offer",
+    "price": "0.02",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+
+<style>
+:root{
+  --paper:#FAFAF7;
+  --paper-raised:#FFFFFF;
+  --ink:#14171C;
+  --ink-soft:#41454D;
+  --muted:#6B7280;
+  --line:#E3E3DE;
+  --accent:#2F5FFF;
+  --accent-ink:#0E2E9E;
+  --signal:#0F9D8C;
+  --code-bg:#0F1117;
+  --code-ink:#D8DEE9;
+  --code-accent:#7CC4FF;
+  --radius:10px;
+  --sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#101215;
+    --paper-raised:#181B20;
+    --ink:#F2F3F5;
+    --ink-soft:#C7CBD1;
+    --muted:#8B909A;
+    --line:#2A2E35;
+    --accent:#6E93FF;
+    --accent-ink:#AFC3FF;
+    --signal:#3FD6C1;
+    --code-bg:#0B0D11;
+    --code-ink:#D8DEE9;
+    --code-accent:#7CC4FF;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101215;
+  --paper-raised:#181B20;
+  --ink:#F2F3F5;
+  --ink-soft:#C7CBD1;
+  --muted:#8B909A;
+  --line:#2A2E35;
+  --accent:#6E93FF;
+  --accent-ink:#AFC3FF;
+  --signal:#3FD6C1;
+  --code-bg:#0B0D11;
+  --code-ink:#D8DEE9;
+  --code-accent:#7CC4FF;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;}
+a{color:inherit;}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+code, pre, .mono{font-family:var(--mono);}
+
+/* ---------- Nav ---------- */
+header.site{
+  position:sticky; top:0; z-index:40;
+  background:color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:17px;letter-spacing:-0.01em;text-decoration:none;color:var(--ink);}
+.brand-mark{width:26px;height:26px;border-radius:7px;background:var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.brand-mark svg{width:15px;height:15px;}
+.navlinks{display:flex;align-items:center;gap:28px;font-size:14.5px;}
+.navlinks a{text-decoration:none;color:var(--ink-soft);}
+.navlinks a:hover{color:var(--ink);}
+.navcta{display:flex;align-items:center;gap:14px;}
+.theme-toggle{
+  border:1px solid var(--line);background:var(--paper-raised);color:var(--ink-soft);
+  width:34px;height:34px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 18px;border-radius:8px;font-size:14.5px;font-weight:600;
+  text-decoration:none;cursor:pointer;border:1px solid transparent;
+  font-family:var(--sans);
+}
+.btn-primary{background:var(--ink);color:var(--paper);}
+.btn-primary:hover{background:var(--accent);}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line);}
+.btn-ghost:hover{border-color:var(--ink);}
+.btn-sm{padding:7px 13px;font-size:13.5px;}
+
+/* ---------- Hero ---------- */
+.hero{padding:76px 0 64px;}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center;}
+.eyebrow-plain{color:var(--signal);font-family:var(--mono);font-size:13.5px;margin:0 0 18px;}
+h1.hero-title{
+  font-size:clamp(34px, 4.4vw, 52px);
+  line-height:1.06;
+  letter-spacing:-0.02em;
+  margin:0 0 20px;
+  font-weight:700;
+}
+.hero-title .hl{color:var(--accent);}
+.hero-sub{font-size:17px;color:var(--ink-soft);max-width:46ch;margin:0 0 30px;}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:28px;}
+.hero-meta{display:flex;gap:22px;flex-wrap:wrap;font-size:13.5px;color:var(--muted);font-family:var(--mono);}
+.hero-meta span{display:flex;align-items:center;gap:6px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--signal);display:inline-block;}
+
+/* ---------- Demo panel ---------- */
+.demo-panel{
+  background:var(--code-bg);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 20px 60px -25px rgba(0,0,0,0.5);
+  border:1px solid rgba(255,255,255,0.06);
+}
+.demo-titlebar{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.demo-titlebar .tdot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.15);}
+.demo-titlebar .label{margin-left:8px;font-family:var(--mono);font-size:12.5px;color:#8891A3;}
+.demo-body{padding:18px 18px 20px;}
+.demo-row{display:flex;gap:8px;margin-bottom:14px;}
+.demo-input{
+  flex:1; background:#191C23;border:1px solid rgba(255,255,255,0.1);
+  border-radius:7px;padding:10px 12px;color:var(--code-ink);
+  font-family:var(--mono);font-size:13.5px;outline:none;
+}
+.demo-input::placeholder{color:#5C6270;}
+.demo-input:focus{border-color:var(--accent);}
+.demo-run{
+  background:var(--accent);color:#fff;border:none;border-radius:7px;
+  padding:0 16px;font-family:var(--sans);font-weight:600;font-size:13.5px;cursor:pointer;
+  white-space:nowrap;
+}
+.demo-run:disabled{opacity:0.5;cursor:default;}
+.demo-output{
+  background:#0B0D11;border:1px solid rgba(255,255,255,0.06);border-radius:8px;
+  padding:14px 15px;min-height:220px;max-height:320px;overflow:auto;
+  font-family:var(--mono);font-size:12.5px;color:var(--code-ink);white-space:pre-wrap;word-break:break-word;
+}
+.demo-output .k{color:var(--code-accent);}
+.demo-output .placeholder{color:#5C6270;}
+.demo-note{font-size:12px;color:#5C6270;margin-top:10px;font-family:var(--mono);}
+
+/* ---------- Sections ---------- */
+section{padding:72px 0;border-top:1px solid var(--line);}
+.section-head{max-width:56ch;margin-bottom:40px;}
+.section-kicker{font-family:var(--mono);font-size:13px;color:var(--signal);margin:0 0 10px;}
+h2{font-size:clamp(24px,3vw,32px);letter-spacing:-0.015em;margin:0 0 12px;font-weight:700;}
+.section-sub{color:var(--ink-soft);font-size:16px;margin:0;}
+
+/* Output shape */
+.shape-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+.shape-cell{background:var(--paper-raised);padding:26px 24px;}
+.shape-cell h3{font-size:15px;margin:0 0 8px;font-family:var(--mono);color:var(--accent);}
+.shape-cell p{margin:0;font-size:14.5px;color:var(--ink-soft);}
+
+/* Pricing */
+.pricing-wrap{display:grid;grid-template-columns:340px 1fr;gap:40px;align-items:start;}
+.price-card{
+  background:var(--paper-raised);border:1px solid var(--line);border-radius:14px;padding:30px;
+}
+.price-tag{display:flex;align-items:baseline;gap:6px;margin-bottom:6px;}
+.price-num{font-size:42px;font-weight:700;letter-spacing:-0.02em;}
+.price-unit{color:var(--muted);font-size:14px;}
+.price-desc{color:var(--ink-soft);font-size:14.5px;margin:0 0 22px;}
+.price-list{list-style:none;margin:0 0 24px;padding:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:var(--ink-soft);}
+.price-list li{display:flex;gap:10px;align-items:flex-start;}
+.price-list svg{flex-shrink:0;margin-top:3px;color:var(--signal);}
+.flow-steps{counter-reset:step;display:flex;flex-direction:column;gap:0;}
+.flow-step{display:flex;gap:18px;padding:20px 0;border-bottom:1px solid var(--line);}
+.flow-step:last-child{border-bottom:none;}
+.flow-num{
+  counter-increment:step;font-family:var(--mono);font-size:13px;color:var(--muted);
+  width:26px;flex-shrink:0;padding-top:2px;
+}
+.flow-num::before{content: counter(step);}
+.flow-body h4{margin:0 0 6px;font-size:15.5px;}
+.flow-body p{margin:0;color:var(--ink-soft);font-size:14.5px;}
+.flow-body code{background:var(--code-bg);color:var(--code-accent);padding:2px 6px;border-radius:4px;font-size:12.5px;}
+
+/* Agents section */
+.agent-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;}
+.code-block{
+  background:var(--code-bg);border-radius:12px;padding:20px 22px;overflow-x:auto;
+  font-family:var(--mono);font-size:13px;line-height:1.65;color:var(--code-ink);
+}
+.code-block .c1{color:#5C6270;}
+.code-block .c2{color:var(--code-accent);}
+.code-block .c3{color:#9CE0C8;}
+.agent-side h3{font-size:17px;margin:0 0 12px;}
+.agent-side p{color:var(--ink-soft);font-size:14.5px;margin:0 0 16px;}
+.link-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
+.link-chip{
+  font-family:var(--mono);font-size:12.5px;padding:6px 11px;border:1px solid var(--line);
+  border-radius:7px;text-decoration:none;color:var(--ink-soft);
+}
+.link-chip:hover{border-color:var(--accent);color:var(--accent);}
+
+/* Errors table */
+.err-table{width:100%;border-collapse:collapse;font-size:14px;}
+.err-table th{text-align:left;font-family:var(--mono);font-size:12.5px;color:var(--muted);font-weight:500;padding:10px 14px;border-bottom:1px solid var(--line);}
+.err-table td{padding:12px 14px;border-bottom:1px solid var(--line);color:var(--ink-soft);vertical-align:top;}
+.err-table td:first-child{font-family:var(--mono);color:var(--accent);white-space:nowrap;}
+.err-table tr:last-child td{border-bottom:none;}
+
+/* Footer */
+footer{border-top:1px solid var(--line);padding:40px 0;}
+.foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:13.5px;color:var(--muted);}
+.foot-links{display:flex;gap:20px;}
+.foot-links a{text-decoration:none;color:var(--muted);}
+.foot-links a:hover{color:var(--ink);}
+
+@media (max-width:860px){
+  .hero-grid{grid-template-columns:1fr;}
+  .shape-grid{grid-template-columns:1fr;}
+  .pricing-wrap{grid-template-columns:1fr;}
+  .agent-grid{grid-template-columns:1fr;}
+  .navlinks{display:none;}
+}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav wrap">
+    <a href="#top" class="brand">
+      <span class="brand-mark">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M20 30h60M20 50h60M20 70h36" stroke="#2F5FFF" stroke-width="9" stroke-linecap="round"/></svg>
+      </span>
+      CleanPage
+    </a>
+    <nav class="navlinks">
+      <a href="#shape">Output</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#agents">For agents</a>
+      <a href="#docs">Docs</a>
+    </nav>
+    <div class="navcta">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">
+        <svg id="themeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+      <a class="btn btn-ghost btn-sm" href="#docs">Docs</a>
+      <a class="btn btn-primary btn-sm" href="#agents">Connect MCP</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" style="border-top:none;padding-top:56px;">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow-plain">web content extraction for autonomous agents</p>
+        <h1 class="hero-title">Any URL in. Clean, <span class="hl">structured</span> content out.</h1>
+        <p class="hero-sub">CleanPage is an MCP tool that strips a page down to what an agent actually needs — readable markdown, metadata, links, and structured facts — with a quality score attached, so your agent never has to guess whether the output is any good.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#agents">Get MCP connection details</a>
+          <a class="btn btn-ghost" href="#pricing">See pricing</a>
+        </div>
+        <div class="hero-meta">
+          <span><i class="dot"></i>$0.02 USDC per call</span>
+          <span><i class="dot"></i>x402 on Base</span>
+          <span><i class="dot"></i>no signup, no API key</span>
+        </div>
+      </div>
+
+      <div class="demo-panel">
+        <div class="demo-titlebar">
+          <span class="tdot"></span><span class="tdot"></span><span class="tdot"></span>
+          <span class="label">clean_page — live preview</span>
+        </div>
+        <div class="demo-body">
+          <div class="demo-row">
+            <input class="demo-input" id="demoUrl" type="text" placeholder="https://example.com/some-article" value="https://en.wikipedia.org/wiki/Model_Context_Protocol" />
+            <button class="demo-run" id="demoRun">Extract</button>
+          </div>
+          <div class="demo-output" id="demoOutput"><span class="placeholder">Output will appear here. This preview truncates to 700 characters — the real clean_page tool returns full markdown, metadata, links, images, and structured facts.</span></div>
+          <p class="demo-note">Free preview, rate-limited. The MCP tool below returns the untruncated result.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="shape">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-kicker">output shape</p>
+        <h2>One call, everything an agent needs to reason about a page</h2>
+        <p class="section-sub">No HTML to parse, no boilerplate to strip, no guessing whether the page loaded correctly. Every response is the same predictable JSON shape.</p>
+      </div>
+      <div class="shape-grid">
+        <div class="shape-cell">
+          <h3>clean_markdown / plain_text</h3>
+          <p>Article body only — nav, ads, cookie banners, and related-article rails are already gone. Markdown preserves headings, lists, links, and tables; plain_text is the flat version.</p>
+        </div>
+        <div class="shape-cell">
+          <h3>metadata</h3>
+          <p>Author, published date, site name, language, word count, and estimated reading time, pulled from the page's own byline and meta tags where available.</p>
+        </div>
+        <div class="shape-cell">
+          <h3>structured_facts</h3>
+          <p>Optional array of standalone claims, entities, statistics, quotes, and dates, each with a confidence score — useful for downstream retrieval or fact-checking.</p>
+        </div>
+        <div class="shape-cell">
+          <h3>links &amp; images</h3>
+          <p>Internal and external links with their anchor text, plus resolved absolute image URLs, deduplicated and capped to a sane count.</p>
+        </div>
+        <div class="shape-cell">
+          <h3>quality_score</h3>
+          <p>A 0–100 heuristic score based on content length, structure, and metadata completeness — so an agent can decide whether to trust or discard a result programmatically.</p>
+        </div>
+        <div class="shape-cell">
+          <h3>extraction_notes</h3>
+          <p>Plain-language notes about anything unusual (short content, truncation, skipped enrichment) instead of failing silently or hallucinating a clean result.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-kicker">pricing</p>
+        <h2>Pay per call. Nothing else.</h2>
+        <p class="section-sub">No subscription, no minimum spend, no dashboard to sign into. Failed extractions — paywalls, bot-blocks, empty pages — are never charged.</p>
+      </div>
+      <div class="pricing-wrap">
+        <div class="price-card">
+          <div class="price-tag"><span class="price-num">$0.02</span><span class="price-unit">USDC / call</span></div>
+          <p class="price-desc">clean_page — the only paid tool. Everything else on this server is free.</p>
+          <ul class="price-list">
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Charged only on successful extraction</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Settled on Base via x402, USDC</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> No account, API key, or wallet whitelisting</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> health, list_capabilities, pricing are free, always</li>
+          </ul>
+          <a class="btn btn-ghost" href="#docs" style="width:100%;justify-content:center;">Read the API reference</a>
+        </div>
+
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-num"></div>
+            <div class="flow-body">
+              <h4>Call <code>clean_page</code> with no payment</h4>
+              <p>You get back HTTP 402 with an <code>accepts</code> array describing exactly what payment is required — amount, network, asset, and payee address.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num"></div>
+            <div class="flow-body">
+              <h4>Sign a USDC authorization</h4>
+              <p>Construct an EIP-3009 <code>transferWithAuthorization</code> payload for the exact amount requested — most x402 client libraries do this automatically from a wallet key.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num"></div>
+            <div class="flow-body">
+              <h4>Retry with <code>X-PAYMENT</code></h4>
+              <p>Same request, same tool call, with the base64-encoded payment payload attached as a header. The server verifies it against the facilitator before doing any work.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num"></div>
+            <div class="flow-body">
+              <h4>Get your result, plus a receipt</h4>
+              <p>On success, the response carries an <code>X-PAYMENT-RESPONSE</code> header with the settlement transaction hash. If extraction fails, settlement never happens — you keep your USDC.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="agents">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-kicker">for agents</p>
+        <h2>Connect in one config block</h2>
+        <p class="section-sub">CleanPage speaks MCP over Streamable HTTP. Point any MCP-compatible agent framework at the endpoint below.</p>
+      </div>
+      <div class="agent-grid">
+        <div class="code-block"><span class="c1">// mcp client config</span>
+{
+  <span class="c2">"mcpServers"</span>: {
+    <span class="c2">"cleanpage"</span>: {
+      <span class="c2">"url"</span>: <span class="c3">"https://cleanpage-mcp.cleanpage-mcp.workers.dev/mcp"</span>,
+      <span class="c2">"transport"</span>: <span class="c3">"streamable-http"</span>
+    }
+  }
+}</div>
+        <div class="agent-side">
+          <h3>Discovery, without a human in the loop</h3>
+          <p>Every capability and price is machine-readable before you spend anything. Call <code>list_capabilities</code> or <code>pricing</code> over MCP, or fetch the static files below directly.</p>
+          <div class="link-row">
+            <a class="link-chip" href="/.well-known/agent.json">/.well-known/agent.json</a>
+            <a class="link-chip" href="/.well-known/mcp.json">/.well-known/mcp.json</a>
+            <a class="link-chip" href="/llms.txt">/llms.txt</a>
+            <a class="link-chip" href="/pricing">/pricing</a>
+            <a class="link-chip" href="/health">/health</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="agent-grid" style="margin-top:40px;">
+        <div class="agent-side">
+          <h3>Example tool call</h3>
+          <p>A minimal <code>tools/call</code> request. The first attempt with no payment returns HTTP 402; retry with the resulting <code>X-PAYMENT</code> header to receive the actual result.</p>
+        </div>
+        <div class="code-block"><span class="c1">POST /mcp</span>
+{
+  <span class="c2">"jsonrpc"</span>: <span class="c3">"2.0"</span>,
+  <span class="c2">"id"</span>: <span class="c3">1</span>,
+  <span class="c2">"method"</span>: <span class="c3">"tools/call"</span>,
+  <span class="c2">"params"</span>: {
+    <span class="c2">"name"</span>: <span class="c3">"clean_page"</span>,
+    <span class="c2">"arguments"</span>: {
+      <span class="c2">"url"</span>: <span class="c3">"https://example.com/article"</span>,
+      <span class="c2">"options"</span>: { <span class="c2">"extract_facts"</span>: <span class="c3">true</span> }
+    }
+  }
+}</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="docs">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="section-kicker">error handling</p>
+        <h2>Typed errors instead of silent junk</h2>
+        <p class="section-sub">If a page can't be cleanly extracted, you get a clear reason and whether it's worth retrying — never a charge for a failed call.</p>
+      </div>
+      <table class="err-table">
+        <thead><tr><th>error_code</th><th>meaning</th><th>retryable</th></tr></thead>
+        <tbody>
+          <tr><td>INVALID_URL</td><td>URL is malformed, non-http(s), or resolves to a blocked internal address.</td><td>no</td></tr>
+          <tr><td>FETCH_FAILED</td><td>The site returned a non-2xx status, non-HTML content, or was too large.</td><td>sometimes</td></tr>
+          <tr><td>TIMEOUT</td><td>The page didn't respond within the configured timeout.</td><td>yes</td></tr>
+          <tr><td>PAYWALL_DETECTED</td><td>The page is behind a subscription/metered paywall; full content isn't accessible.</td><td>no</td></tr>
+          <tr><td>BLOCKED_BY_SITE</td><td>Bot-check, CAPTCHA, or a JS-only shell with no server-rendered content.</td><td>no</td></tr>
+          <tr><td>EMPTY_CONTENT</td><td>No substantial article content was found (listing page, homepage, etc).</td><td>no</td></tr>
+          <tr><td>EXTRACTION_FAILED</td><td>The extraction engine hit an unexpected parsing error.</td><td>no</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot-row">
+    <span>CleanPage — built for agents that read the web for a living.</span>
+    <div class="foot-links">
+      <a href="/health">Status</a>
+      <a href="/.well-known/agent.json">agent.json</a>
+      <a href="/llms.txt">llms.txt</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const KEY = 'cleanpage-theme';
+  const root = document.documentElement;
+  function apply(theme){
+    if(theme){ root.setAttribute('data-theme', theme); } else { root.removeAttribute('data-theme'); }
+  }
+  try {
+    const saved = localStorage.getItem(KEY);
+    if (saved) apply(saved);
+  } catch(e) {}
+  document.getElementById('themeToggle').addEventListener('click', function(){
+    const current = root.getAttribute('data-theme') ||
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const next = current === 'dark' ? 'light' : 'dark';
+    apply(next);
+    try { localStorage.setItem(KEY, next); } catch(e) {}
+  });
+})();
+
+(function(){
+  const btn = document.getElementById('demoRun');
+  const input = document.getElementById('demoUrl');
+  const out = document.getElementById('demoOutput');
+
+  function esc(s){
+    return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  }
+
+  async function run(){
+    const url = input.value.trim();
+    if(!url){ return; }
+    btn.disabled = true;
+    btn.textContent = 'Extracting…';
+    out.innerHTML = '<span class="placeholder">Fetching and cleaning…</span>';
+    try{
+      const res = await fetch('/api/demo', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ url })
+      });
+      const data = await res.json();
+      if(!res.ok || data.error){
+        out.innerHTML = '<span class="placeholder">Error (' + esc(data.error_code || res.status) + '): ' + esc(data.message || 'extraction failed') + '</span>';
+      } else {
+        out.innerHTML =
+          '<span class="k">title:</span> ' + esc(data.title) + '\n' +
+          '<span class="k">quality_score:</span> ' + esc(data.quality_score) + '\n' +
+          '<span class="k">site:</span> ' + esc(data.metadata.site_name) + '   <span class="k">words:</span> ' + esc(data.metadata.word_count) + '\n\n' +
+          esc(data.clean_markdown);
+      }
+    } catch(err){
+      out.innerHTML = '<span class="placeholder">Network error — try again.</span>';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Extract';
+    }
+  }
+
+  btn.addEventListener('click', run);
+  input.addEventListener('keydown', function(e){ if(e.key === 'Enter') run(); });
+})();
+</script>
+</body>
+</html>

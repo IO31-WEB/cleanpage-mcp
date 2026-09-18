@@ -1,0 +1,35 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schema/discovery.json",
+  "name": "cleanpage",
+  "display_name": "CleanPage",
+  "description": "Clean, structured, agent-optimized web content extraction. One paid tool (clean_page) plus free discovery tools (health, list_capabilities, pricing).",
+  "version": "1.0.0",
+  "protocol_version": "2025-03-26",
+  "endpoint": "https://cleanpage-mcp.cleanpage-mcp.workers.dev/mcp",
+  "transport": "streamable-http",
+  "stateless": true,
+  "auth": {
+    "type": "none",
+    "payment": {
+      "type": "x402",
+      "scheme": "exact",
+      "network": "base",
+      "asset": "USDC",
+      "facilitator": "https://x402.org/facilitator"
+    }
+  },
+  "tools": [
+    { "name": "clean_page", "paid": true, "price_usd": 0.02 },
+    { "name": "health", "paid": false, "price_usd": 0 },
+    { "name": "list_capabilities", "paid": false, "price_usd": 0 },
+    { "name": "pricing", "paid": false, "price_usd": 0 }
+  ],
+  "example_client_config": {
+    "mcpServers": {
+      "cleanpage": {
+        "url": "https://cleanpage-mcp.cleanpage-mcp.workers.dev/mcp",
+        "transport": "streamable-http"
+      }
+    }
+  }
+}

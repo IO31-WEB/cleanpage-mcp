@@ -1,0 +1,58 @@
+{
+  "name": "CleanPage",
+  "description": "Turns any URL into clean, structured, agent-optimized content: markdown, plain text, metadata, links, structured facts, and a quality score. Built for autonomous agents to call directly.",
+  "version": "1.0.0",
+  "provider": {
+    "name": "CleanPage",
+    "url": "https://cleanpage-mcp.cleanpage-mcp.workers.dev"
+  },
+  "mcp": {
+    "endpoint": "https://cleanpage-mcp.cleanpage-mcp.workers.dev/mcp",
+    "transport": "streamable-http",
+    "discovery": "https://cleanpage-mcp.cleanpage-mcp.workers.dev/.well-known/mcp.json"
+  },
+  "capabilities": [
+    {
+      "id": "clean_page",
+      "type": "mcp_tool",
+      "paid": true,
+      "pricing": {
+        "amount": "0.02",
+        "currency": "USDC",
+        "network": "base",
+        "scheme": "x402/exact"
+      },
+      "description": "Fetch a URL and return clean markdown, plain text, metadata, links, images, structured facts, and a quality score."
+    },
+    {
+      "id": "health",
+      "type": "mcp_tool",
+      "paid": false,
+      "description": "Service status check."
+    },
+    {
+      "id": "list_capabilities",
+      "type": "mcp_tool",
+      "paid": false,
+      "description": "Full list of tools, schemas, and prices."
+    },
+    {
+      "id": "pricing",
+      "type": "mcp_tool",
+      "paid": false,
+      "description": "Current pricing and x402 payment flow details."
+    }
+  ],
+  "payments": {
+    "protocol": "x402",
+    "network": "base",
+    "asset": "USDC",
+    "payTo": "0x644ee781ebd3518972878b4e46fd417573785a8c",
+    "facilitator": "https://x402.org/facilitator",
+    "docs": "https://cleanpage-mcp.cleanpage-mcp.workers.dev/#pricing"
+  },
+  "authentication": "none",
+  "contact": "https://cleanpage-mcp.cleanpage-mcp.workers.dev/#contact",
+  "documentation": "https://cleanpage-mcp.cleanpage-mcp.workers.dev/",
+  "llms_txt": "https://cleanpage-mcp.cleanpage-mcp.workers.dev/llms.txt"
+}

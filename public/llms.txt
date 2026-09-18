@@ -1,0 +1,39 @@
+# CleanPage
+
+> CleanPage turns any URL into clean, structured, agent-optimized content
+> (markdown, plain text, metadata, links, structured facts, quality score).
+> It is exposed as a Model Context Protocol (MCP) server over Streamable
+> HTTP, with a paid tool priced and settled via the x402 protocol
+> (USDC on Base). Free discovery tools let you evaluate before paying.
+
+## MCP connection
+
+- Endpoint: https://cleanpage-mcp.cleanpage-mcp.workers.dev/mcp
+- Transport: Streamable HTTP (stateless), JSON-RPC 2.0
+- Discovery: https://cleanpage-mcp.cleanpage-mcp.workers.dev/.well-known/mcp.json
+- Agent card: https://cleanpage-mcp.cleanpage-mcp.workers.dev/.well-known/agent.json
+
+## Tools
+
+- `health` — free. Service status check.
+- `list_capabilities` — free. Full tool list, schemas, and prices.
+- `pricing` — free. Current price, network, asset, and payment flow.
+- `clean_page` — paid, $0.02 USDC per successful call via x402 on Base.
+  Input: `{ url, options? }`. Output: title, clean_markdown, plain_text,
+  structured_facts, metadata, links, images, quality_score, extraction_notes.
+  Failed extractions (paywalls, bot-walls, empty pages) are never charged.
+
+## Payment flow (x402)
+
+1. Call `clean_page` with no payment.
+2. Receive HTTP 402 with `accepts: [paymentRequirements]`.
+3. Sign a USDC `transferWithAuthorization` (EIP-3009) payment payload per
+   the returned requirements and retry the same call with an `X-PAYMENT`
+   header (base64 JSON payload).
+4. On success, the response includes `X-PAYMENT-RESPONSE` with settlement
+   details (transaction hash, network).
+
+## Documentation
+
+- Full docs and live demo: https://cleanpage-mcp.cleanpage-mcp.workers.dev/
+- API/MCP reference: https://cleanpage-mcp.cleanpage-mcp.workers.dev/#docs

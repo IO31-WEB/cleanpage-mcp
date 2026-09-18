@@ -1,0 +1,59 @@
+name = "cleanpage-mcp"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Static assets (landing page, docs, .well-known discovery files)
+[assets]
+directory = "./public"
+binding = "ASSETS"
+# `true` routes every request through the Worker first; the Worker itself
+# falls back to static assets via ASSETS.fetch() in its notFound handler
+# (see src/index.ts). This is the form compatible with both Wrangler v3 and
+# v4 — v4 additionally supports an array of path patterns here if you'd
+# rather let most static paths bypass the Worker entirely for performance.
+run_worker_first = true
+
+# ---------------------------------------------------------------------------
+# KV namespace used for:
+#  - lightweight rate limiting (per-IP / per-payer token buckets)
+#  - simple self-hosted analytics counters (calls, revenue, success rate)
+#  - short-lived extraction cache (keyed by normalized URL)
+# Create with: wrangler kv namespace create CLEANPAGE_KV
+# ---------------------------------------------------------------------------
+[[kv_namespaces]]
+binding = "CLEANPAGE_KV"
+id = "YOUR_KV_NAMESPACE_ID"
+preview_id = "YOUR_KV_PREVIEW_ID"
+
+# ---------------------------------------------------------------------------
+# Environment variables (non-secret). Secrets (none currently required for
+# the core flow, since x402 settlement needs no private key on the server —
+# see README "How payment settlement works") are set via `wrangler secret put`.
+# ---------------------------------------------------------------------------
+[vars]
+# Wallet address on Base that receives USDC payments. Required.
+PAYMENT_ADDRESS = "0xYourBaseWalletAddressHere"
+
+# Network: "base" for mainnet USDC, "base-sepolia" for testnet during development.
+X402_NETWORK = "base"
+
+# x402 facilitator URL that verifies + settles payments on your behalf.
+X402_FACILITATOR_URL = "https://x402.org/facilitator"
+
+# Price per successful clean_page call, in USD (the facilitator converts to
+# the equivalent USDC atomic amount for the configured network).
+CLEAN_PAGE_PRICE_USD = "0.02"
+
+# Public URL this worker is deployed at (used in agent.json / mcp.json / OG tags).
+PUBLIC_BASE_URL = "https://cleanpage-mcp.cleanpage-mcp.workers.dev"
+
+# Rate limiting: max free-tier discovery calls per IP per minute.
+FREE_RATE_LIMIT_PER_MIN = "30"
+
+# Optional: enable light LLM post-processing (fact extraction, better titles)
+# for pages where deterministic extraction is weak. Requires ANTHROPIC_API_KEY secret.
+ENABLE_LLM_ENRICHMENT = "true"
+
+# Model used for optional enrichment.
+LLM_MODEL = "claude-haiku-4-5-20251001"

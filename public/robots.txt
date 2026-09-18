@@ -1,0 +1,24 @@
+# CleanPage — content extraction service for AI agents.
+# Human crawlers: welcome, index away.
+User-agent: *
+Allow: /
+
+# Agent/LLM crawlers: explicitly welcomed. See /llms.txt and
+# /.well-known/agent.json and /.well-known/mcp.json for machine-readable
+# capability and pricing descriptions.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://cleanpage-mcp.cleanpage-mcp.workers.dev/sitemap.xml
